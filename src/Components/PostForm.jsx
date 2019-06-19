@@ -53,20 +53,19 @@ class PostForm extends Component {
     })
   }
 
-  onImageDropHandler = async (pictureFiles, pictureDataURLs) => {    
-    EXIF.getData(pictureFiles[0], function() {
-      const metaData = EXIF.getAllTags(this);
-      debugger;
+  getMetaData = image =>  {
+    EXIF.getData(image[0], function() {
+      EXIF.getAllTags(this);
     })
-
-    this.setState({
-      image: pictureDataURLs,
-      button: 'hide-button',
-      imageMetaData: metaData
-    }, () => {
-      console.log(this.state)
+  }
+  onImageDropHandler = async (pictureFiles, pictureDataURLs) => {
+    EXIF.getData(pictureFiles[0], function ()  {
+      let lat = EXIF.getTag(this, 'GPSLatitude');
+      let long = EXIF.getTag(this, 'GPSLongitude');
+      let metaData = [lat, long]
+      console.log(metaData)
+ //    this.setState ({ imageLocationData: metaData })
     })
-    
   }
 
   uploadPost = (e) => {
