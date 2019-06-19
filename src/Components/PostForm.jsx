@@ -3,6 +3,8 @@ import { Form, Button, Icon, Header, Segment, Container, Sidebar, Divider } from
 import axios from 'axios';
 import ImageUploader from 'react-images-upload'
 import PropTypes from 'prop-types'
+import { EXIF } from "exif-js";
+
 
 const TopSidebar = ({ visible, message, successMessage, closeButton }) => (
   <>
@@ -51,11 +53,20 @@ class PostForm extends Component {
     })
   }
 
-  onImageDropHandler = (pictureFiles, pictureDataURLs) => {
+  onImageDropHandler = async (pictureFiles, pictureDataURLs) => {    
+    EXIF.getData(pictureFiles[0], function() {
+      const metaData = EXIF.getAllTags(this);
+      debugger;
+    })
+
     this.setState({
       image: pictureDataURLs,
-      button: 'hide-button'
+      button: 'hide-button',
+      imageMetaData: metaData
+    }, () => {
+      console.log(this.state)
     })
+    
   }
 
   uploadPost = (e) => {
