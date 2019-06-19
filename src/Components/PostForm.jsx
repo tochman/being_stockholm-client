@@ -3,7 +3,10 @@ import { Form, Button, Icon, Header, Segment, Container, Sidebar, Divider } from
 import axios from 'axios';
 import ImageUploader from 'react-images-upload'
 import PropTypes from 'prop-types'
-import { EXIF } from "exif-js";
+// import { EXIF } from "exif-js";
+import ExifReader from 'exifreader';
+import fileToArrayBuffer from 'file-to-array-buffer'
+
 
 
 const TopSidebar = ({ visible, message, successMessage, closeButton }) => (
@@ -53,20 +56,35 @@ class PostForm extends Component {
     })
   }
 
-  getMetaData = image =>  {
-    EXIF.getData(image[0], function() {
-      EXIF.getAllTags(this);
-    })
-  }
+  // getMetaData = image =>  {
+  //   EXIF.getData(image[0], function() {
+  //     EXIF.getAllTags(this);
+  //   })
+  // }
   onImageDropHandler = async (pictureFiles, pictureDataURLs) => {
-    EXIF.getData(pictureFiles[0], function ()  {
-      let lat = EXIF.getTag(this, 'GPSLatitude');
-      let long = EXIF.getTag(this, 'GPSLongitude');
-      let metaData = [lat, long]
-      console.log(metaData)
- //    this.setState ({ imageLocationData: metaData })
+    // let metaData
+    let image = pictureFiles[0]
+    fileToArrayBuffer(image).then((data) => {
+      // console.log(data)
+      const tags = ExifReader.load(data);
+      debugger
+      //=> ArrayBuffer {byteLength: ...}
     })
+
+    
+    debugger
+
+    //     EXIF.getData(pictureFiles[0], function ()  {
+    //       let lat = EXIF.getTag(this, 'GPSLatitude');
+    //       let long = EXIF.getTag(this, 'GPSLongitude');
+    //       metaData = [lat, long]
+    //  //    this.setState ({ imageLocationData: metaData })
+    //     })
+    //     console.log(metaData)
+
+    // debugger
   }
+
 
   uploadPost = (e) => {
     e.preventDefault();
