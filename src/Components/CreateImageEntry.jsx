@@ -32,6 +32,7 @@ class CreateImageEntry extends Component {
 
   onImageDropHandler = (pictureFiles, pictureDataURLs) => {
     if (pictureFiles.length > 0) {
+      this.setState({button: 'hide-button'})
       let image = pictureFiles[0]
       fileToArrayBuffer(image).then((data) => {
         try {
@@ -114,12 +115,7 @@ class CreateImageEntry extends Component {
     )
 
   render() {
-
-    if (this.state.image.length === 0) {
-      this.state.button = 'show-button'
-    }
     const { activeItem } = this.state
-
     return (
       <>
         <Sidebar.Pushable as={Segment} textAlign='center'
